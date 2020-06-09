@@ -1,16 +1,18 @@
 # adapters.opencaesar
-Adapter from legacy OML to OpenCAESAR Oml
 
-[![Build Status](https://cae-jenkins2.jpl.nasa.gov/buildStatus/icon?job=IMCE%2Fgov.nasa.jpl.imce.caesar.adapter.opencaesar%2Fmaster)](https://cae-jenkins2.jpl.nasa.gov/job/IMCE/job/gov.nasa.jpl.imce.caesar.adapter.opencaesar/job/master/)
+[![Build Status](https://travis-ci.org/jpl-imce/adapters-opencaesar.svg?branch=master)](https://travis-ci.org/jpl-imce/opencaesar-adapter)
+[ ![Download](https://api.bintray.com/packages/jpl-imce/opencaesar-adapter/legacy2oml/images/download.svg) ](https://bintray.com/jpl-imce/opencaesar-adapter/legacy2oml/_latestVersion)
+
+Adapter from legacy OML to OpenCAESAR OML
 
 ## Documentation
 
-The documentation of the mapping is provided [here](https://github.jpl.nasa.gov/imce-caesar/adapters.opencaesar/blob/master/docs/Legacy-to-New-OML-Mapping.md)
+The documentation of the mapping is provided [here](docs/Legacy-to-New-OML-Mapping.md)
 
 ## Clone
 ```
-    git clone https://github.jpl.nasa.gov/imce-caesar/adapters.opencaesar.git
-    cd adapters.opencaesar
+    git clone https://github.com/jpl-imce/opencaesar-adapter.git
+    cd opencaesar-adapter
 ```
       
 ## Build
@@ -46,6 +48,7 @@ In a gradle.build script, add the following:
 buildscript {
 	repositories {
 		mavenLocal()
+		maven { url 'https://dl.bintray.com/jpl-imce/opencaesar-adapter' }
 		maven { url 'https://dl.bintray.com/opencaesar/oml' }
 		maven { url 'https://dl.bintray.com/jpl-imce/gov.nasa.jpl.imce.oml' }
 	}

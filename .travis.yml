@@ -1,0 +1,21 @@
+language: java
+install: true
+
+jdk:
+- openjdk8
+
+before_script:
+- cd legacy2oml
+
+script:
+  - ./gradlew build
+
+deploy:
+  - provider: script
+    script: ./gradlew bintrayUpload
+    skip_cleanup: true
+    dry-run: false
+    on:
+      tags: true
+      repo: jpl-imce/opencaesar-adapter
+      branch: master
