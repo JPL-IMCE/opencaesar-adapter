@@ -32,6 +32,7 @@ group = 'io.opencaesar.legacy'
 version = '0.7.0'
 mainClassName = 'io.opencaesar.legacy2oml.App'
 applicationName = 'legacy2oml'
+ext.title = 'Legacy to OML'
 
 ext.versions = [
     oml: '0.7.+',
