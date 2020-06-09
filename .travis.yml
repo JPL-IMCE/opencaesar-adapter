@@ -22,5 +22,5 @@ deploy:
     dry-run: false
     on:
       tags: true
-      repo: jpl-imce/opencaesar-adapter
+      repo: JPL-IMCE/opencaesar-adapter
       branch: master
