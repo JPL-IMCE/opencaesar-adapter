@@ -25,14 +25,15 @@ apply plugin: 'com.jfrog.bintray'
 apply plugin: 'application'
 apply plugin: 'java-gradle-plugin'
 
-apply from: "${rootDir}/gradle/source-layout.gradle"
-apply from: "${rootDir}/gradle/maven-deployment.gradle"
-
 group = 'io.opencaesar.legacy'
 version = '0.7.0'
 mainClassName = 'io.opencaesar.legacy2oml.App'
 applicationName = 'legacy2oml'
 ext.title = 'Legacy to OML'
+description = 'Transformation from Legacy OML to openCAESAR OML'
+
+apply from: "${rootDir}/gradle/source-layout.gradle"
+apply from: "${rootDir}/gradle/maven-deployment.gradle"
 
 ext.versions = [
     oml: '0.7.+',
