@@ -1,6 +1,6 @@
 # adapters.opencaesar
 
-[![Build Status](https://travis-ci.org/jpl-imce/adapters-opencaesar.svg?branch=master)](https://travis-ci.org/jpl-imce/opencaesar-adapter)
+[![Build Status](https://travis-ci.org/JPL-IMCE/opencaesar-adapter.svg?branch=master)](https://travis-ci.org/JPL-IMCE/opencaesar-adapter)
 [ ![Download](https://api.bintray.com/packages/jpl-imce/opencaesar-adapter/legacy2oml/images/download.svg) ](https://bintray.com/jpl-imce/opencaesar-adapter/legacy2oml/_latestVersion)
 
 Adapter from legacy OML to OpenCAESAR OML
