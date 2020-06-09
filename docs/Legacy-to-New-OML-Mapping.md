@@ -14,13 +14,13 @@ https://github.com/JPL-IMCE/gov.nasa.jpl.imce.ontologies.public/tree/feature/IMC
 ## New OML (v0.5)
 
 ### Abstract syntax:
-https://github.com/opencaesar/oml-server/blob/master/oml-server/io.opencaesar.oml/src/main/java/io/opencaesar/oml/Oml.xcore
+https://github.com/opencaesar/oml/blob/master/io.opencaesar.oml.parent/io.opencaesar.oml/src/io/opencaesar/oml/Oml.xcore
 
 ### Concrete syntax:
-https://github.com/opencaesar/oml-server/blob/master/oml-server/io.opencaesar.oml.dsl/src/main/java/io/opencaesar/oml/dsl/Oml.xtext
+https://github.com/opencaesar/oml/blob/master/io.opencaesar.oml.parent/io.opencaesar.oml.dsl/src/io/opencaesar/oml/dsl/Oml.xtext
 
 ### Example vocabularies:
-https://github.com/opencaesar/vocabularies/tree/master/src/main/oml
+https://github.com/opencaesar/vocabularies/tree/master/src/
 
 # High Level Comparison
 
@@ -39,7 +39,7 @@ The following sections are meant to present a high level overview of the mapping
 
 The detailed mapping between Legacy OML and new OML is given by the following transformation:
 
-https://github.jpl.nasa.gov/imce-caesar/adapters.opencaesar/blob/master/legacy2oml/src/main/java/io/opencaesar/legacy2oml/Legacy2Oml.xtend
+hhttps://github.com/jpl-imce/opencaesar-adapter/blob/master/legacy2oml/src/main/java/io/opencaesar/legacy2oml/Legacy2Oml.xtend
 
 Note that the transformation is partial:
 - Covers the subset of Vocabularies used by the IMCE vocabularies
@@ -545,13 +545,3 @@ writer.addSpecializationAxiom (vocabulary, specializingIri, specializedIri)
 writer.finish
 writer.save(options)
 ``` 
-
-### Example Adapters (New OML)
-- Legacy2Oml : converts legacy OML models to new OML (written with OmlWriter API)
-   - https://github.jpl.nasa.gov/imce-caesar/adapters.opencaesar/blob/master/legacy2oml/src/main/java/io/opencaesar/legacy2oml/Legacy2Oml.xtend
-- Ecore2Oml: converts Ecore models to OML models (written with OmlWriter API)
-   - https://github.com/opencaesar/ecore-adapter/blob/master/ecore-adapter/ecore2oml/src/main/java/io/opencaesar/ecore2oml/EcoreToOml.xtend
-- Oml2Bikeshed: converts Oml models to Bikeshed specs
-   - https://github.com/opencaesar/oml-bikeshed/blob/master/oml2bikeshed/src/main/java/io/opencaesar/oml2bikeshed/OmlToBikeshed.xtend
-- Oml2Owl: converts Oml models to Owl models (written with OmlVisitor API)
-   - https://github.com/opencaesar/owl-adapter/blob/master/owl-adapter/oml2owl/src/main/java/io/opencaesar/oml2owl/Oml2Owl.xtend
