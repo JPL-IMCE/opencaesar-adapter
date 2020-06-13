@@ -26,7 +26,7 @@ apply plugin: 'application'
 apply plugin: 'java-gradle-plugin'
 
 group = 'io.opencaesar.legacy'
-version = '0.7.0'
+version = '0.7.1'
 mainClassName = 'io.opencaesar.legacy2oml.App'
 applicationName = 'legacy2oml'
 ext.title = 'Legacy to OML'

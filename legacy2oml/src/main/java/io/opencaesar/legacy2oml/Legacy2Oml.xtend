@@ -410,7 +410,9 @@ class Legacy2Oml {
 		}
 		
 		if (input.subject instanceof Module) {
-			oml.addAnnotation(ontology, propertyIri, input.value.convertToLiteral(null, ontology))
+			if (propertyIri != "http://purl.org/dc/elements/1.1/identifier") {
+				oml.addAnnotation(ontology, propertyIri, input.value.convertToLiteral(null, ontology))
+			}
 		} else if (input.subject instanceof CardinalityRestrictedAspect ||
 			input.subject instanceof CardinalityRestrictedConcept ||
 			input.subject instanceof CardinalityRestrictedReifiedRelationship) {
@@ -567,6 +569,10 @@ class Legacy2Oml {
 	}
 
 	def String convertName(Module module) {
+		val name = module.annotations.findFirst[property.getIri == "http://purl.org/dc/elements/1.1/identifier"]?.value?.value
+		if (name !== null) {
+			return name
+		}
 		switch(module.getIri) {
 			case "http://purl.org/dc/elements/1.1/": "dc"		
 			case "http://www.w3.org/1999/02/22-rdf-syntax-ns": "rdf"		
