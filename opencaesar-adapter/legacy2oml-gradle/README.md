@@ -8,14 +8,14 @@ A tool to translate ontologies from Legacy OML to openCAESAR OML
 In a build.gradle script, use:
 ```
 buildscript {
-    repositories {
+	repositories {
 		maven { url 'https://dl.bintray.com/jpl-imce/opencaesar-adapter' }
-        mavenCentral()
-        jcenter()
-    }
-    dependencies {
+		mavenCentral()
+		jcenter()
+	}
+	dependencies {
 		classpath 'io.opencaesar.legacy:legacy2oml-gradle:+'
-    }
+	}
 }
 task legacy2oml(type:Legacy2OmlTask) {
 	inputCatalogPath = file('path/to/input/legacy/oml/catalog.xml') [Required]

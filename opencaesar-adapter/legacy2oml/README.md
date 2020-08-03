@@ -8,11 +8,11 @@ A tool to translate ontologies from Legacy OML to openCAESAR OML
 
 MacOS/Linux:
 ```
-    ./gradlew run --args="-i path/to/legacy/oml/folder -c path/to/legacy/oml/catalog -o path/to/opencaesar/oml/folder"
+./gradlew run --args="-i path/to/legacy/oml/folder -c path/to/legacy/oml/catalog -o path/to/opencaesar/oml/folder"
 ```
 Windows:
 ```
-    gradlew.bat run --args="-i path/to/legacy/oml/folder -c path/to/legacy/oml/catalog -o path/to/opencaesar/oml/folder"
+gradlew.bat run --args="-i path/to/legacy/oml/folder -c path/to/legacy/oml/catalog -o path/to/opencaesar/oml/folder"
 ```
 Args:
 ```
