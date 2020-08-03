@@ -12,7 +12,7 @@ buildscript {
 
 subprojects {
 	group = 'io.opencaesar.legacy'
-	version = '0.7.1'
+	version = '0.7.2'
 
 	ext.versions = [
 		legacy: '0.9.7.+',
