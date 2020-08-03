@@ -117,15 +117,15 @@ class Legacy2Oml {
 	}
 
 	def dispatch Vocabulary toOntology(TerminologyGraph graph) {
-		oml.createVocabulary(graph.convertIri, graph.convertSeparator, graph.convertName, outputResourceURI)
+		oml.createVocabulary(outputResourceURI, graph.convertIri, graph.convertSeparator, graph.convertName)
 	}
 
 	def dispatch VocabularyBundle toOntology(Bundle bundle) {
-		oml.createVocabularyBundle(bundle.convertIri, bundle.convertSeparator, bundle.convertName, outputResourceURI)
+		oml.createVocabularyBundle(outputResourceURI, bundle.convertIri, bundle.convertSeparator, bundle.convertName)
 	}
 
 	def dispatch Description toOntology(DescriptionBox box) {
-		oml.createDescription(box.convertIri, box.convertSeparator, box.convertName, outputResourceURI)
+		oml.createDescription(outputResourceURI, box.convertIri, box.convertSeparator, box.convertName)
 	}
 
 	def dispatch void addToOntology(EObject input, Ontology ontology) {
@@ -324,7 +324,7 @@ class Legacy2Oml {
 		if (importedURI !== null) {
 			val importingURI = inputResource.URI
 			val String relativePath = importedURI.deresolve(importingURI, true, true, true).toString
-			oml.addDescriptionUsage(description, relativePath+'.'+App.OML, null)
+			oml.addDescriptionUsage(description, relativePath+'.'+Legacy2OmlApp.OML, null)
 		}
 	}
 
@@ -333,7 +333,7 @@ class Legacy2Oml {
 		if (importedURI !== null) {
 			val importingURI = inputResource.URI
 			val String relativePath = importedURI.deresolve(importingURI, true, true, true).toString
-			oml.addDescriptionExtension(description, relativePath+'.'+App.OMLXMI, null)
+			oml.addDescriptionExtension(description, relativePath+'.'+Legacy2OmlApp.OMLXMI, null)
 		}
 	}
 

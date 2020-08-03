@@ -1,0 +1,9 @@
+ext.title = 'Legacy to OML Gradle'
+description = 'A gradle interface to invoke Legacy to OML tool'
+
+dependencies {
+	implementation gradleApi()
+    implementation project (':legacy2oml')
+
+    implementation 'org.eclipse.xtext:org.eclipse.xtext:2.19.0'
+}

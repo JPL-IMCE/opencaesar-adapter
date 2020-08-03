@@ -10,7 +10,7 @@ cache:
     - $HOME/.gradle
 
 before_script:
-- cd legacy2oml
+- cd opencaesar-adapter
 
 script:
   - ./gradlew build

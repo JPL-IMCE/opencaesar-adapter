@@ -1,0 +1,21 @@
+apply plugin: 'application'
+
+ext.title = 'Legacy to OML'
+description = 'Transformation from Legacy OML to openCAESAR OML'
+mainClassName = 'io.opencaesar.legacy2oml.Legacy2OmlApp'
+applicationName = 'legacy2oml'
+
+dependencies {
+    implementation 'com.beust:jcommander:1.72'
+	implementation 'xml-resolver:xml-resolver:1.2'
+	implementation 'org.apache.commons:commons-compress:1.1'
+	implementation 'com.fasterxml.uuid:java-uuid-generator:3.2.0'
+	
+    implementation "gov.nasa.jpl.imce.oml:gov.nasa.jpl.imce.oml.model:${versions.legacy}"
+    implementation "gov.nasa.jpl.imce.oml:gov.nasa.jpl.imce.oml.dsl:${versions.legacy}"
+    implementation "gov.nasa.jpl.imce.oml:gov.nasa.jpl.imce.oml.zip:${versions.legacy}"
+    
+    implementation "io.opencaesar.oml:io.opencaesar.oml.dsl:${versions.oml}"
+
+    testImplementation 'junit:junit:4.12'
+}

@@ -33,63 +33,55 @@ import org.apache.log4j.LogManager
 import org.eclipse.emf.common.util.URI
 import org.eclipse.xtext.resource.XtextResourceSet
 
-class App {
+class Legacy2OmlApp {
 
 	package static val OML = 'oml'
 	package static val OMLXMI = "omlxmi"
 	package static val OMLZIP = "omlzip"
 
 	@Parameter(
-		names=#["--input","-i"],
-		description="Path to the OML1 input folder (Required)",
-		validateWith=InputFolderPath,
-		required=false,
-		order=1)
-	package String inputFolderPath = "."
-
-	@Parameter(
-		names=#["--input-catalog","-c"],
-		description="Path to the OML1 catalog (Required)",
-		validateWith=CatalogPath,
+		names=#["--input-catalog-path","-i"],
+		description="Path to the input legacy OML catalog (Required)",
+		validateWith=InputCatalogPath,
 		required=true,
 		order=2)
-	package String inputCatalogPath = null
+	String inputCatalogPath = null
 
 	@Parameter(
-		names=#["--output","-o"],
-		description="Path to the OML output folder (Default: Current)",
-		validateWith=OutputFolderPath,
+		names=#["--output-catalog-path","-o"],
+		description="Path to the output openCAESAR OML catalog (Required)",
+		validateWith=OutputCatalogPath,
 		required=false,
 		order=3)
-	package String outputFolderPath = "."
+	String outputCatalogPath = "."
 
 	@Parameter(
-		names=#["--output-description-bundle","-b"],
+		names=#["--output-description-bundle-iri","-b"],
 		description="Iri of an OML2 description bundle",
 		required=false,
 		order=4)
-	package String outputDescriptionBundleIri = null
+	String outputDescriptionBundleIri = null
 
 	@Parameter(
 		names=#["--debug", "-d"],
 		description="Shows debug logging statements",
 		order=5)
-	package boolean debug
+	boolean debug
 
 	@Parameter(
 		names=#["--help","-h"],
 		description="Displays summary of options",
 		help=true,
 		order=6) 
-	package boolean help
+	boolean help
 
-	val LOGGER = LogManager.getLogger(App)
+	val LOGGER = LogManager.getLogger(Legacy2OmlApp)
 
 	/*
 	 * The main method
 	 */
 	def static void main(String ... args) {
-		val app = new App
+		val app = new Legacy2OmlApp
 		val builder = JCommander.newBuilder().addObject(app).build()
 		builder.parse(args)
 		if (app.help) {
@@ -99,9 +91,6 @@ class App {
 		if (app.debug) {
 			val appender = LogManager.getRootLogger.getAppender("stdout")
 			(appender as AppenderSkeleton).setThreshold(Level.DEBUG)
-		}
-		if (app.outputFolderPath.endsWith('/')) {
-			app.outputFolderPath = app.outputFolderPath.substring(0, app.outputFolderPath.length - 1)
 		}
 		app.run()
 	}
@@ -115,9 +104,7 @@ class App {
 		LOGGER.info("                   Legacy Oml to Oml " + getAppVersion)
 		LOGGER.info("=================================================================")
 		LOGGER.info("Input Catalog= " + inputCatalogPath)
-		LOGGER.info("Output Folder= " + outputFolderPath)
-
-		val inputFolder = new File(inputFolderPath)
+		LOGGER.info("Output Catalog= " + outputCatalogPath)
 
 		// create the input resource set
 		OMLZipResourceSet.doSetup()
@@ -131,6 +118,9 @@ class App {
 		inputCatalog.parseCatalog(new URL('file:' + inputCatalogPath))
 
 		// find the input paths supported by the catalog
+		val inputCatalogFile = new File(inputCatalogPath)
+		val inputFolder = inputCatalogFile.parentFile
+		val inputFolderPath = inputFolder.absolutePath
 		var inputFiles = collectOMLFiles(inputFolder)
 
 		// Mixed mode: sort the file such that OML files are first before OMLZIP
@@ -160,6 +150,11 @@ class App {
 		OmlXMIResourceFactory.register
 		val outputResourceSet = new XtextResourceSet
 
+		// output resources
+		val outputCatalogFile = new File(outputCatalogPath)
+		val outputFolder = outputCatalogFile.parentFile
+		val outputFolderPath = outputFolder.absolutePath
+
 		// create the Oml writer
 		val writer = new OmlWriter(outputResourceSet)
 		writer.start
@@ -173,9 +168,9 @@ class App {
 			val inputIri = (inputResource.contents.get(0) as Extent).modules.get(0).getIri
 			if (inputResource !== null && !Legacy2Oml.isBuiltInOntology(inputIri)) {
 				var relativePath = inputFolder.toPath().normalize().relativize(inputFile.toPath())
-				relativePath = Paths.get(outputFolderPath + '/' + relativePath.toString).normalize
+				relativePath = Paths.get(outputFolderPath + File.separator + relativePath.toString).normalize
 				var outputResourceURI = URI.createFileURI(relativePath.toString).trimFileExtension
-				if (outputResourceURI.toFileString.endsWith('/')) {
+				if (outputResourceURI.toFileString.endsWith(File.separator)) {
 					val s = outputResourceURI.toFileString
 					outputResourceURI = URI.createFileURI(s.substring(0, s.length - 1))
 				}
@@ -202,18 +197,13 @@ class App {
 			path = path.replaceFirst(inputFolderPath, outputFolderPath)
 			val uri = URI.createURI(path)
 			LOGGER.info("Creating: " + uri.appendFileExtension(OMLXMI))
-			val bundle = writer.createDescriptionBundle(outputDescriptionBundleIri, SeparatorKind.HASH, uri.lastSegment, uri.appendFileExtension(OMLXMI))
+			val bundle = writer.createDescriptionBundle(uri.appendFileExtension(OMLXMI), outputDescriptionBundleIri, SeparatorKind.HASH, uri.lastSegment)
 			descriptions.forEach[it| writer.addDescriptionBundleInclusion(bundle, it.iri+'.'+OMLXMI, null)]
 		}
 
-		// copy the catalog files before the writer can finish 
-		// this is because the finish process may use the catalogs 
-		val catalogFiles = collectCatalogFiles(inputFolder)
-		for (catalogFile : catalogFiles) {
-			val outputCatalog = catalogFile.path.replaceFirst(inputFolderPath, outputFolderPath).replace('oml.catalog.xml', 'catalog.xml')
-			LOGGER.info("Saving: " + outputCatalog)
-			copyCatalog(catalogFile.toString, outputCatalog)
-		}
+		// copy the catalog file before the writer can finish 
+		// this is because the finish process may use the catalog 
+		copyCatalog(inputCatalogFile, outputCatalogFile)
 
 		// finish the Oml writer
 		LOGGER.info("Finishing the creation of all models")
@@ -233,7 +223,7 @@ class App {
 		LOGGER.info("=================================================================")
 	}
 
-	def Collection<File> collectOMLFiles(File f) {
+	private def Collection<File> collectOMLFiles(File f) {
 		val omlFiles = new ArrayList
 		if (f.isDirectory) {
 			for (file : f.listFiles()) {
@@ -261,20 +251,6 @@ class App {
 		return omlFiles
 	}
 
-	def Collection<File> collectCatalogFiles(File directory) {
-		val catalogFiles = new ArrayList<File>
-		for (file : directory.listFiles()) {
-			if (file.isFile) {
-				if (file.name == 'oml.catalog.xml') {
-					catalogFiles.add(file)
-				}
-			} else if (file.isDirectory) {
-				catalogFiles.addAll(collectCatalogFiles(file))
-			}
-		}
-		return catalogFiles
-	}
-
 	private def String getFileExtension(File file) {
 		val fileName = file.getName()
 		if (fileName.lastIndexOf(".") != -1)
@@ -283,41 +259,11 @@ class App {
 			return ""
 	}
 
-	static class InputFolderPath implements IParameterValidator {
-		override validate(String name, String value) throws ParameterException {
-			val directory = new File(value)
-			if (!directory.exists) {
-				throw new ParameterException("Parameter " + name + " should be a valid folder path")
-			}
-		}
-	}
-
-	static class OutputFolderPath implements IParameterValidator {
-		override validate(String name, String value) throws ParameterException {
-			val directory = new File(value)
-			if (!directory.exists) {
-				val created = directory.mkdirs
-				if (!created) {
-					throw new ParameterException("Parameter " + name + " should be a valid folder path")
-				}
-			}
-		}
-	}
-
-	static class CatalogPath implements IParameterValidator {
-		override validate(String name, String value) throws ParameterException {
-			val file = new File(value)
-			if (!file.name.endsWith('catalog.xml')) {
-				throw new ParameterException("Parameter " + name + " should be a valid OML catalog path")
-			}
-		}
-	}
-
 	/**
 	 * Get application version id from properties file.
 	 * @return version string from build.properties or UNKNOWN
 	 */
-	def String getAppVersion() {
+	private def String getAppVersion() {
 		var version = "UNKNOWN"
 		try {
 			val input = Thread.currentThread().getContextClassLoader().getResourceAsStream("version.txt")
@@ -330,22 +276,21 @@ class App {
 		version
 	}
 
-	static private def copyCatalog(String originalPath, String newPath) {
-		val fileToBeModified = new File(newPath)
-		fileToBeModified.parentFile.mkdirs
+	private static def copyCatalog(File originalCatalog, File newCatalog) {
+		originalCatalog.parentFile.mkdirs
 		var oldContent = ""
 		var BufferedReader reader = null
 		var FileWriter writer = null
 
 		try {
-			reader = new BufferedReader(new FileReader(originalPath))
+			reader = new BufferedReader(new FileReader(originalCatalog))
 			var line = reader.readLine()
 			while (line !== null) {
 				oldContent = oldContent + line + System.lineSeparator()
 				line = reader.readLine()
 			}
 			val newContent = oldContent.replaceAll('file:', '')
-			writer = new FileWriter(fileToBeModified)
+			writer = new FileWriter(newCatalog)
 			writer.write(newContent)
 		} catch (IOException e) {
 			e.printStackTrace()
@@ -356,6 +301,31 @@ class App {
 				writer.close()
 			} catch (IOException e) {
 				e.printStackTrace()
+			}
+		}
+	}
+
+	static class InputCatalogPath implements IParameterValidator {
+		override validate(String name, String value) throws ParameterException {
+			val file = new File(value)
+			if (!file.name.endsWith('catalog.xml')) {
+				throw new ParameterException("Parameter " + name + " should be a valid legacy OML catalog path")
+			}
+		}
+	}
+
+	static class OutputCatalogPath implements IParameterValidator {
+		override validate(String name, String value) throws ParameterException {
+			val file = new File(value)
+			if (!file.name.endsWith('catalog.xml')) {
+				throw new ParameterException("Parameter " + name + " should be a valid legacy OML catalog path")
+			}
+			val directory = file.parentFile
+			if (!directory.exists) {
+				val created = directory.mkdirs
+				if (!created) {
+					throw new ParameterException("Parameter " + name + " should be a valid openCAESAR catalog path")
+				}
 			}
 		}
 	}
