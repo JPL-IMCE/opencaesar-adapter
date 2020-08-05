@@ -45,7 +45,7 @@ class Legacy2OmlApp {
 		validateWith=InputCatalogPath,
 		required=true,
 		order=2)
-	String inputCatalogPath = null
+	String inputCatalogPath
 
 	@Parameter(
 		names=#["--output-catalog-path","-o"],
@@ -53,7 +53,7 @@ class Legacy2OmlApp {
 		validateWith=OutputCatalogPath,
 		required=false,
 		order=3)
-	String outputCatalogPath = "."
+	String outputCatalogPath
 
 	@Parameter(
 		names=#["--output-description-bundle-iri","-b"],
@@ -201,9 +201,14 @@ class Legacy2OmlApp {
 			descriptions.forEach[it| writer.addDescriptionBundleInclusion(bundle, it.iri+'.'+OMLXMI, null)]
 		}
 
-		// copy the catalog file before the writer can finish 
-		// this is because the finish process may use the catalog 
-		copyCatalog(inputCatalogFile, outputCatalogFile)
+		// copy the catalog file (and other nested catalog files) before the writer can finish 
+		// this is because the finish process may use these catalogs
+		val catalogFiles = collectCatalogFiles(inputFolder)
+		for (catalogFile : catalogFiles) {
+			val outputCatalog = catalogFile.path.replaceFirst(inputFolderPath, outputFolderPath).replace('oml.catalog.xml', 'catalog.xml')
+			LOGGER.info("Saving: " + outputCatalog)
+			copyCatalog(catalogFile, new File(outputCatalog))
+		}
 
 		// finish the Oml writer
 		LOGGER.info("Finishing the creation of all models")
@@ -249,6 +254,20 @@ class Legacy2OmlApp {
 			}
 		}
 		return omlFiles
+	}
+
+	def Collection<File> collectCatalogFiles(File directory) {
+		val catalogFiles = new ArrayList<File>
+		for (file : directory.listFiles()) {
+			if (file.isFile) {
+				if (file.name == 'oml.catalog.xml') {
+					catalogFiles.add(file)
+				}
+			} else if (file.isDirectory) {
+				catalogFiles.addAll(collectCatalogFiles(file))
+			}
+		}
+		return catalogFiles
 	}
 
 	private def String getFileExtension(File file) {
