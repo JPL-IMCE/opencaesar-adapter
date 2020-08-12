@@ -20,6 +20,6 @@ buildscript {
 task legacy2oml(type:Legacy2OmlTask) {
 	inputCatalogPath = file('path/to/input/legacy/oml/catalog.xml') [Required]
 	outputCatalogPath = file('path/to/output/opencaesar/oml/catalog.xml') [Required]
-	descriptionBundleIri = 'iri-of-opencaesar-description-bundle' [Optional]
+	outputDescriptionBundleIri = 'iri-of-opencaesar-description-bundle' [Optional]
 }
 ```

@@ -13,7 +13,7 @@ public class Legacy2OmlTask extends DefaultTask {
 
 	public String outputCatalogPath;
 
-	public String descriptionBundleIri;
+	public String outputDescriptionBundleIri;
 	
     @TaskAction
     public void run() {
@@ -26,9 +26,9 @@ public class Legacy2OmlTask extends DefaultTask {
 			args.add("-o");
 			args.add(outputCatalogPath);
         }
-	    if (descriptionBundleIri != null) {
+	    if (outputDescriptionBundleIri != null) {
 			args.add("-b");
-			args.add(descriptionBundleIri);
+			args.add(outputDescriptionBundleIri);
 	    }
 	    try {
         	Legacy2OmlApp.main(args.toArray(new String[0]));
