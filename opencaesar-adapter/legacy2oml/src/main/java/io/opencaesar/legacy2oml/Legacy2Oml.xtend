@@ -341,10 +341,10 @@ class Legacy2Oml {
 		if (input.superConcept instanceof CardinalityRestrictedConcept) {
 			val restriction = input.superConcept as CardinalityRestrictedConcept
 			val axiom = oml.addRelationCardinalityRestrictionAxiom(vocabulary, input.subConcept.iri, restriction.restrictedRelationship.iri, restriction.restrictionKind.convert, restriction.restrictedCardinality.convert, restriction.restrictedRange.iri)
-			restriction.annotations.forEach[oml.addAnnotation(axiom, property.getIri, value.convertToLiteral(null, vocabulary))]
+			restriction.annotations.forEach[oml.addAnnotation(vocabulary, axiom, property.getIri, value.convertToLiteral(null, vocabulary))]
 		} else {
 			val axiom = oml.addSpecializationAxiom(vocabulary, input.subConcept.iri, input.superConcept.iri)
-			input.annotations.forEach[oml.addAnnotation(axiom, property.getIri, value.convertToLiteral(null, vocabulary))]
+			input.annotations.forEach[oml.addAnnotation(vocabulary, axiom, property.getIri, value.convertToLiteral(null, vocabulary))]
 		}
 	}
 
@@ -352,10 +352,10 @@ class Legacy2Oml {
 		if (input.superAspect instanceof CardinalityRestrictedAspect) {
 			val restriction = input.superAspect as CardinalityRestrictedAspect
 			val axiom = oml.addRelationCardinalityRestrictionAxiom(vocabulary, input.subEntity.iri, restriction.restrictedRelationship.iri, restriction.restrictionKind.convert, restriction.restrictedCardinality.convert, restriction.restrictedRange.iri)
-			restriction.annotations.forEach[oml.addAnnotation(axiom, property.getIri, value.convertToLiteral(null, vocabulary))]
+			restriction.annotations.forEach[oml.addAnnotation(vocabulary, axiom, property.getIri, value.convertToLiteral(null, vocabulary))]
 		} else {
 			val axiom = oml.addSpecializationAxiom(vocabulary, input.subEntity.iri, input.superAspect.iri)
-			input.annotations.forEach[oml.addAnnotation(axiom, property.getIri, value.convertToLiteral(null, vocabulary))]
+			input.annotations.forEach[oml.addAnnotation(vocabulary, axiom, property.getIri, value.convertToLiteral(null, vocabulary))]
 		}
 	}
 
@@ -363,41 +363,41 @@ class Legacy2Oml {
 		if (input.superRelationship instanceof CardinalityRestrictedReifiedRelationship) {
 			val restriction = input.superRelationship as CardinalityRestrictedReifiedRelationship
 			val axiom = oml.addRelationCardinalityRestrictionAxiom(vocabulary, input.subRelationship.iri, restriction.restrictedRelationship.iri, restriction.restrictionKind.convert, restriction.restrictedCardinality.convert, restriction.restrictedRange.iri)
-			restriction.annotations.forEach[oml.addAnnotation(axiom, property.getIri, value.convertToLiteral(null, vocabulary))]
+			restriction.annotations.forEach[oml.addAnnotation(vocabulary, axiom, property.getIri, value.convertToLiteral(null, vocabulary))]
 		} else {
 			val axiom = oml.addSpecializationAxiom(vocabulary, input.subRelationship.iri, input.superRelationship.iri)
-			input.annotations.forEach[oml.addAnnotation(axiom, property.getIri, value.convertToLiteral(null, vocabulary))]
+			input.annotations.forEach[oml.addAnnotation(vocabulary, axiom, property.getIri, value.convertToLiteral(null, vocabulary))]
 		}
 	}
 	
 	def dispatch void addToOntology(SubDataPropertyOfAxiom input, Vocabulary vocabulary) {
 		val axiom = oml.addSpecializationAxiom(vocabulary, input.subProperty.iri, input.superProperty.iri)
-		input.annotations.forEach[oml.addAnnotation(axiom, property.getIri, value.convertToLiteral(null, vocabulary))]
+		input.annotations.forEach[oml.addAnnotation(vocabulary, axiom, property.getIri, value.convertToLiteral(null, vocabulary))]
 	}
 
 	def dispatch void addToOntology(SubObjectPropertyOfAxiom input, Vocabulary vocabulary) {
 		val axiom = oml.addSpecializationAxiom(vocabulary, input.subProperty.reifiedIri, input.superProperty.reifiedIri)
-		input.annotations.forEach[oml.addAnnotation(axiom, property.getIri, value.convertToLiteral(null, vocabulary))]
+		input.annotations.forEach[oml.addAnnotation(vocabulary, axiom, property.getIri, value.convertToLiteral(null, vocabulary))]
 	}
 
 	def dispatch void addToOntology(EntityUniversalRestrictionAxiom input, Vocabulary vocabulary) {
 		val axiom = oml.addRelationRangeRestrictionAxiom(vocabulary, input.restrictedDomain.iri, input.restrictedRelationship.iri, input.restrictedRange.iri, RangeRestrictionKind.ALL)
-		input.annotations.forEach[oml.addAnnotation(axiom, property.getIri, value.convertToLiteral(null, vocabulary))]
+		input.annotations.forEach[oml.addAnnotation(vocabulary, axiom, property.getIri, value.convertToLiteral(null, vocabulary))]
 	}
 
 	def dispatch void addToOntology(EntityExistentialRestrictionAxiom input, Vocabulary vocabulary) {
 		val axiom = oml.addRelationRangeRestrictionAxiom(vocabulary, input.restrictedDomain.iri, input.restrictedRelationship.iri, input.restrictedRange.iri, RangeRestrictionKind.SOME)
-		input.annotations.forEach[oml.addAnnotation(axiom, property.getIri, value.convertToLiteral(null, vocabulary))]
+		input.annotations.forEach[oml.addAnnotation(vocabulary, axiom, property.getIri, value.convertToLiteral(null, vocabulary))]
 	}
 
 	def dispatch void addToOntology(EntityScalarDataPropertyParticularRestrictionAxiom input, Vocabulary vocabulary) {
 		val axiom = oml.addScalarPropertyValueRestrictionAxiom(vocabulary, input.restrictedEntity.iri, input.scalarProperty.iri, input.literalValue.convertToLiteral(input.valueType, vocabulary))
-		input.annotations.forEach[oml.addAnnotation(axiom, property.getIri, value.convertToLiteral(null, vocabulary))]
+		input.annotations.forEach[oml.addAnnotation(vocabulary, axiom, property.getIri, value.convertToLiteral(null, vocabulary))]
 	}
 
 	def dispatch void addToOntology(SingletonInstanceScalarDataPropertyValue input, Description description) {
 		val axiom = oml.addScalarPropertyValueAssertion(description, input.singletonInstance.iri, input.scalarDataProperty.iri, input.scalarPropertyValue.convertToLiteral(input.valueType, description))
-		input.annotations.forEach[oml.addAnnotation(axiom, property.getIri, value.convertToLiteral(null, description))]
+		input.annotations.forEach[oml.addAnnotation(description, axiom, property.getIri, value.convertToLiteral(null, description))]
 	}
 
 	def dispatch void addToOntology(AnnotationPropertyValue input, Ontology ontology) {
