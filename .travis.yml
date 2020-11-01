@@ -9,9 +9,6 @@ cache:
     - $HOME/.m2
     - $HOME/.gradle
 
-before_script:
-- cd opencaesar-adapter
-
 script:
   - ./gradlew build
 
@@ -22,5 +19,4 @@ deploy:
     dry-run: false
     on:
       tags: true
-      repo: JPL-IMCE/opencaesar-adapter
       branch: master
