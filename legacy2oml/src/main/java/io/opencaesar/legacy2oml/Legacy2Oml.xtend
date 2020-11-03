@@ -282,7 +282,7 @@ class Legacy2Oml {
 	def dispatch void addToOntology(ReifiedRelationshipInstance input, Description description) {
 		val domain = input.getDescriptionBox.reifiedRelationshipInstanceDomains.findFirst[reifiedRelationshipInstance == input].domain
 		val range = input.getDescriptionBox.reifiedRelationshipInstanceRanges.findFirst[reifiedRelationshipInstance == input].range
-		oml.addRelationInstance(description, input.getName, domain.iri, range.iri)
+		oml.addRelationInstance(description, input.getName, Collections.singletonList(domain.iri), Collections.singletonList(range.iri))
 		oml.addRelationTypeAssertion(description, input.iri, input.singletonConceptualRelationshipClassifier.iri)
 	}
 
