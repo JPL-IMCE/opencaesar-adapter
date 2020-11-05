@@ -12,11 +12,11 @@ buildscript {
 
 subprojects {
 	group = 'io.opencaesar.adapters'
-	version = '0.7.6'
+	version = '0.8.0'
 
 	ext.versions = [
 		legacy: '0.9.7.+',
-		oml: '0.7.+',
+		oml: '0.8.+',
 	]
 
 	repositories {
