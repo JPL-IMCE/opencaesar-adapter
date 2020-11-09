@@ -21,7 +21,7 @@ Requirements: JDK 8
     ./gradlew build
 ```
 
-## [Legacy to OML](opencaesar-adapter/legacy2oml/README.md)
+## [Legacy to OML](legacy2oml)
 
 [ ![Download](https://api.bintray.com/packages/jpl-imce/opencaesar-adapter/legacy2oml/images/download.svg) ](https://bintray.com/jpl-imce/opencaesar-adapter/legacy2oml/_latestVersion)
 
