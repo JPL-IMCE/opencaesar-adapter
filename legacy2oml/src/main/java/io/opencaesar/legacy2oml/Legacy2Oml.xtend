@@ -482,7 +482,7 @@ class Legacy2Oml {
 	}
 
 	def dispatch Literal convertToLiteral(LiteralBoolean value, DataRange dataRange, Ontology ontology) {
-		oml.createBooleanLiteral(ontology, value.bool, dataRange?.iri)
+		oml.createBooleanLiteral(ontology, value.bool)
 	}
 	
 	def dispatch Literal convertToLiteral(LiteralDateTime value, DataRange dataRange, Ontology ontology) {
@@ -523,7 +523,7 @@ class Legacy2Oml {
 	}
 
 	def dispatch Literal convertToLiteral(LiteralReal value, DataRange dataRange, Ontology ontology) {
-		oml.createDoubleLiteral(ontology, Double.valueOf(value.real.value), dataRange?.iri)
+		oml.createDoubleLiteral(ontology, Double.valueOf(value.real.value))
 	}
 
 	def dispatch Literal convertToLiteral(LiteralRational value, DataRange dataRange, Ontology ontology) {
@@ -531,7 +531,7 @@ class Legacy2Oml {
 	}
 
 	def dispatch Literal convertToLiteral(LiteralFloat value, DataRange dataRange, Ontology ontology) {
-		oml.createDoubleLiteral(ontology, Double.valueOf(value.float.value), dataRange?.iri)
+		oml.createDoubleLiteral(ontology, Double.valueOf(value.float.value))
 	}
 
 	def dispatch Literal convertToLiteral(LiteralDecimal value, DataRange dataRange, Ontology ontology) {
@@ -539,7 +539,7 @@ class Legacy2Oml {
 		try {
 			val longValue = Long.valueOf(decimalValue)
 			if (longValue >= -2147483648l && longValue < 2147483648l) {
-				oml.createIntegerLiteral(ontology, Integer.valueOf(decimalValue), dataRange?.iri)
+				oml.createIntegerLiteral(ontology, Integer.valueOf(decimalValue))
 			} else if (longValue >= 2147483648l && longValue < 4294967296l) {
 				oml.createQuotedLiteral(ontology, decimalValue, dataRange?.iri?:"http://www.w3.org/2001/XMLSchema#unsignedInt", null)
 			} else {
@@ -547,7 +547,7 @@ class Legacy2Oml {
 			}
 		} catch (NumberFormatException e) {
 			if (decimalValue.contains('.')) {
-				oml.createDecimalLiteral(ontology, new BigDecimal(decimalValue), dataRange?.iri)
+				oml.createDecimalLiteral(ontology, new BigDecimal(decimalValue))
 			} else {
 				oml.createQuotedLiteral(ontology, decimalValue, dataRange?.iri?:"http://www.w3.org/2001/XMLSchema#unsignedLong", null)
 			}
